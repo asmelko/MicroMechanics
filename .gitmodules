@@ -1,0 +1,3 @@
+[submodule "submodules/paraBioFVM"]
+	path = submodules/paraBioFVM
+	url = git@github.com:asmelko/paraBioFVM.git
