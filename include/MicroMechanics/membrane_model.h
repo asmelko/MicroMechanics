@@ -1,13 +1,13 @@
 #pragma once
 
-#include "mech_agent_data.h"
+#include "mech_environment.h"
 
 namespace micromech {
 
 class membrane_model
 {
 public:
-	virtual void compute_basement_membrane_interactions(mech_agent_data& cells) = 0;
+	virtual void compute_basement_membrane_interactions(mech_environment& me) = 0;
 };
 
 } // namespace micromech

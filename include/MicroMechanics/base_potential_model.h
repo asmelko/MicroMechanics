@@ -1,32 +1,30 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
 #include <BioFVM/mesh.h>
 #include <BioFVM/types.h>
 
+#include "grid_space_partitioner.h"
+#include "mech_environment.h"
 #include "potential_model.h"
 
 namespace micromech {
 
 class base_potential_model : public potential_model
 {
-	void compute_agents_potentials();
-	void attach_detach_springs();
-	void compute_springs_potentials();
+	void compute_agents_potentials(mech_environment& me);
+	void attach_detach_springs(mech_environment& me);
+	void compute_springs_potentials(mech_environment& me);
 
-protected:
-	biofvm::real_t timestep;
-	biofvm::cartesian_mesh mechanics_mesh;
-	std::unique_ptr<std::vector<biofvm::index_t>> agents_in_voxels;
+	grid_space_partitioner& partitioner_;
 
 public:
-	base_potential_model(const biofvm::real_t timestep);
+	base_potential_model(grid_space_partitioner& partitioner, mech_environment& me);
 
-	virtual void update_velocities(mech_agent_data& cells) override;
+	virtual void update_velocities(mech_environment& me) override;
 
-	virtual void update_neighbors(mech_agent_data& cells) override;
+	virtual void update_neighbors(mech_environment& me) override;
+
+	virtual void update_positions(mech_environment& me) override;
 };
 
 } // namespace micromech

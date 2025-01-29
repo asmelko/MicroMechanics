@@ -19,8 +19,16 @@ struct base_potential_data : public agent_data
 	std::vector<biofvm::real_t> attachment_rate;
 	std::vector<biofvm::real_t> detachment_rate;
 
-	virtual void add(biofvm::index_t size, biofvm::index_t cell_definitions_count) override;
-	virtual void remove(biofvm::index_t index, biofvm::index_t size, biofvm::index_t cell_definitions_count) override;
+	std::vector<biofvm::real_t> simple_pressure;
+
+	std::vector<biofvm::real_t> previous_velocity;
+
+	std::vector<std::vector<biofvm::index_t>> springs;
+
+	base_potential_data(mech_environment& me);
+
+	virtual void add() override;
+	virtual void remove(biofvm::index_t index) override;
 };
 
 } // namespace micromech

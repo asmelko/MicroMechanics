@@ -4,10 +4,16 @@
 
 namespace micromech {
 
+struct mech_environment;
+
 struct agent_data
 {
-	virtual void add(biofvm::index_t size, biofvm::index_t cell_definitions_count);
-	virtual void remove(biofvm::index_t index, biofvm::index_t size, biofvm::index_t cell_definitions_count);
+	mech_environment& me;
+
+	agent_data(mech_environment& me);
+
+	virtual void add();
+	virtual void remove(biofvm::index_t index);
 };
 
 } // namespace micromech

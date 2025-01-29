@@ -37,6 +37,13 @@ include_directories(include/MicroMechanics src)
 target_include_directories(MicroMechanicsCore
                            PUBLIC ${paraBioFVM_SOURCE_DIR}/include)
 
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+  target_link_libraries(MicroMechanicsCore PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
+target_link_libraries(MicroMechanicsCore PUBLIC BioFVMCore)
+
 # Target MicroMechanics
 add_executable(MicroMechanics src/main.cpp)
-target_link_libraries(MicroMechanics MicroMechanicsCore BioFVMCore)
+target_link_libraries(MicroMechanics MicroMechanicsCore)
