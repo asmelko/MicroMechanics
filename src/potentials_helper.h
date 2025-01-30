@@ -39,6 +39,11 @@ struct potentials_helper<1>
 	{
 		dst[0] = lhs[0] - rhs[0];
 	}
+
+	static constexpr void add(biofvm::real_t* __restrict__ lhs, const biofvm::real_t* __restrict__ rhs)
+	{
+		lhs[0] += rhs[0];
+	}
 };
 
 template <>
@@ -72,6 +77,12 @@ struct potentials_helper<2>
 	{
 		dst[0] = lhs[0] - rhs[0];
 		dst[1] = lhs[1] - rhs[1];
+	}
+
+	static constexpr void add(biofvm::real_t* __restrict__ lhs, const biofvm::real_t* __restrict__ rhs)
+	{
+		lhs[0] += rhs[0];
+		lhs[1] += rhs[1];
 	}
 };
 
@@ -110,6 +121,13 @@ struct potentials_helper<3>
 		dst[0] = lhs[0] - rhs[0];
 		dst[1] = lhs[1] - rhs[1];
 		dst[2] = lhs[2] - rhs[2];
+	}
+
+	static constexpr void add(biofvm::real_t* __restrict__ lhs, const biofvm::real_t* __restrict__ rhs)
+	{
+		lhs[0] += rhs[0];
+		lhs[1] += rhs[1];
+		lhs[2] += rhs[2];
 	}
 };
 

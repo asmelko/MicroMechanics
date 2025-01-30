@@ -25,7 +25,7 @@ struct mech_agent_data
 
 	std::vector<std::vector<biofvm::index_t>> neighbors;
 
-	std::unique_ptr<agent_data> potential_data, membrane_data;
+	std::unique_ptr<agent_data> potential_data, membrane_data, motility_data;
 
 	mech_agent_data(mech_environment& me);
 

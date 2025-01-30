@@ -12,5 +12,6 @@ mech_agent_data::mech_agent_data(mech_environment& me)
 	: bio_agent_data(me.m),
 	  me(me),
 	  potential_data(std::make_unique<empty_data>(me)),
-	  membrane_data(std::make_unique<empty_data>(me))
+	  membrane_data(std::make_unique<empty_data>(me)),
+	  motility_data(std::make_unique<empty_data>(me))
 {}

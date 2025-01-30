@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 
 #include "agent_data.h"

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <BioFVM/agent_data.h>
 
 #include "agent_data.h"
