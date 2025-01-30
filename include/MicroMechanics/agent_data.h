@@ -12,8 +12,10 @@ struct agent_data
 
 	agent_data(mech_environment& me);
 
-	virtual void add();
-	virtual void remove(biofvm::index_t index);
+	biofvm::index_t agents_count() const;
+
+	virtual void add() = 0;
+	virtual void remove(biofvm::index_t index) = 0;
 };
 
 } // namespace micromech

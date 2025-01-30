@@ -12,7 +12,7 @@ struct mech_environment
 
 	biofvm::real_t timestep;
 
-	biofvm::real_t agent_types_count;
+	biofvm::index_t agent_types_count;
 
     mech_agent_data agent_data;
 
