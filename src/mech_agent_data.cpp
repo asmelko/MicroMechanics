@@ -50,3 +50,5 @@ void mech_agent_data::remove(index_t index)
 	agent_type_indices[index] = agent_type_indices[agents_count()];
 	neighbors[index] = neighbors[agents_count()];
 }
+
+index_t mech_agent_data::agents_count() const { return bio_agent_data.agents_count; }

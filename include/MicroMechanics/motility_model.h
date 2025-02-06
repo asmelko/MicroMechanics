@@ -1,8 +1,8 @@
 #pragma once
 
-#include "mech_environment.h"
-
 namespace micromech {
+
+struct mech_environment;
 
 class motility_model
 {
