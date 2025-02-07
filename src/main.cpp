@@ -10,6 +10,7 @@
 #include "base_motility_model.h"
 #include "base_potential_data.h"
 #include "base_potential_model.h"
+#include "base_vtk_serializer.h"
 #include "base_wall_membrane_model.h"
 #include "grid_space_partitioner.h"
 #include "mech_environment.h"
@@ -50,12 +51,12 @@ void setup_base_potential_data(index_t i, mech_environment& me)
 void make_agents(std::size_t count, mech_environment& me, data_setup_func_t&& setup_membrane_data,
 				 data_setup_func_t&& setup_motility_data, data_setup_func_t&& setup_potential_data)
 {
-	std::uniform_real_distribution<real_t> distr_x(me.m.mesh.bounding_box_mins[0] + 100,
-												   me.m.mesh.bounding_box_maxs[0] - 100);
-	std::uniform_real_distribution<real_t> distr_y(me.m.mesh.bounding_box_mins[1] + 100,
-												   me.m.mesh.bounding_box_maxs[1] - 100);
-	std::uniform_real_distribution<real_t> distr_z(me.m.mesh.bounding_box_mins[2] + 100,
-												   me.m.mesh.bounding_box_maxs[2] - 100);
+	std::uniform_real_distribution<real_t> distr_x(me.m.mesh.bounding_box_mins[0] + 200,
+												   me.m.mesh.bounding_box_maxs[0] - 200);
+	std::uniform_real_distribution<real_t> distr_y(me.m.mesh.bounding_box_mins[1] + 200,
+												   me.m.mesh.bounding_box_maxs[1] - 200);
+	std::uniform_real_distribution<real_t> distr_z(me.m.mesh.bounding_box_mins[2] + 200,
+												   me.m.mesh.bounding_box_maxs[2] - 200);
 
 	std::mt19937 gen;
 
@@ -101,11 +102,13 @@ int main()
 
 	me.motility_m = std::make_unique<base_motility_model>(me);
 
-	size_t agents_count = 20000;
+	size_t agents_count = 2000;
 	make_agents(agents_count, me, setup_base_membrane_data, setup_base_motility_data, setup_base_potential_data);
 
+	base_vtk_serializer vtk_serializer("output");
+
 #pragma omp parallel
-	for (index_t i = 0; i < 100; i++)
+	for (index_t i = 0; i < 500; i++)
 	{
 		std::size_t partition_duration, membrane_duration, motility_duration, neighbors_duration, velocities_duration,
 			positions_duration;
@@ -169,12 +172,29 @@ int main()
 
 			positions_duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 		}
-        
+
+#pragma omp barrier
 #pragma omp master
-		std::cout << "Partition time: " << partition_duration << " ms,\t Membrane time: " << membrane_duration
-				  << " ms,\t Motility time: " << motility_duration << " ms,\t Neighbors time: " << neighbors_duration
-				  << " ms,\t Velocities time: " << velocities_duration
-				  << " ms,\t Positions time: " << positions_duration << " ms" << std::endl;
+		{
+			std::size_t serialization_duration;
+			{
+				auto start = std::chrono::high_resolution_clock::now();
+
+				vtk_serializer.serialize_one_timestep(me);
+
+				auto end = std::chrono::high_resolution_clock::now();
+
+				serialization_duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+			}
+
+			std::cout << "Partition time: " << partition_duration << " ms,\t Membrane time: " << membrane_duration
+					  << " ms,\t Motility time: " << motility_duration
+					  << " ms,\t Neighbors time: " << neighbors_duration
+					  << " ms,\t Velocities time: " << velocities_duration
+					  << " ms,\t Positions time: " << positions_duration
+					  << " ms,\t Serialization time: " << serialization_duration << " ms" << std::endl;
+		}
+#pragma omp barrier
 	}
 
 	return 0;
